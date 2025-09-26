@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebrare Swiper</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./index.css"/>
+</head>
+<body>
+
+<div class="thumbs-container">
+    <div class="swiper myswiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide thumb-slide" style="background-color:#f44336;">1</div>
+            <div class="swiper-slide thumb-slide" style="background-color:#2196f3;">2</div>
+            <div class="swiper-slide thumb-slide" style="background-color:#4caf50;">3</div>
+            <div class="swiper-slide thumb-slide" style="background-color:#ff9800;">4</div>
+        </div>
+    </div>
+</div>
+
+
+<div class="main-container">
+    
+    <div class="swiper myswiper2">
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" style="background-color:#f44336;">Slide 1</div>
+            <div class="swiper-slide" style="background-color:#2196f3;">Slide 2</div>
+            <div class="swiper-slide" style="background-color:#4caf50;">Slide 3</div>
+            <div class="swiper-slide" style="background-color:#ff9800;">Slide 4</div>
+        </div>
+        <div class="swiper-button-next"></div>
+    </div>
+    
+</div>
+
+
+<div class="edit-panel-right">
+    <input type="text" id="slideText" placeholder="Slide Text">
+    <input type="color" id="slideColor">
+    <button id="applyChanges">Apply</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<script>
+    // Thumbnail swiper: show all slides
+    var thumbsSwiper = new Swiper('.myswiper', {
+        direction: 'vertical',
+        slidesPerView: 4,
+        spaceBetween: 10,
+        allowTouchMove: false
+    });
+
+    // Main swiper
+    var mainSwiper = new Swiper('.myswiper2', {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        thumbs: {
+            swiper: thumbsSwiper
+        },
+        simulateTouch:false,
+        effect:"cards"
+
+    });
+
+    // Thumbnail brightness
+    function updateThumbnailBrightness() {
+        thumbsSwiper.slides.forEach((slide, index) => {
+            if(index === mainSwiper.activeIndex) {
+                slide.style.filter = 'brightness(1)';
+            } else {
+                slide.style.filter = 'brightness(0.5)';
+            }
+        });
+    }
+
+    updateThumbnailBrightness();
+    mainSwiper.on('slideChange', () => updateThumbnailBrightness());
+
+    // Editable panel functionality
+    document.getElementById('applyChanges').addEventListener('click', () => {
+        const text = document.getElementById('slideText').value;
+        const color = document.getElementById('slideColor').value;
+        let currentSlide = mainSwiper.slides[mainSwiper.activeIndex];
+        if(text) currentSlide.textContent = text;
+        if(color) currentSlide.style.backgroundColor = color;
+    });
+</script>
+<script src="./index.js"></script>
+</body>
+</html>
